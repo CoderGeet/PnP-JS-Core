@@ -4,7 +4,8 @@ import { Items } from "./items";
 import { Views, View } from "./views";
 import { ContentTypes } from "./contenttypes";
 import { Fields } from "./fields";
-import { Queryable, QueryableCollection, QueryableSecurable } from "./queryable";
+import { Queryable, QueryableCollection } from "./queryable";
+import { QueryableSecurable } from "./QueryableSecurable";
 import * as Util from "../../utils/util";
 import { TypedHash } from "../../collections/collections";
 
@@ -52,7 +53,7 @@ export class Lists extends QueryableCollection {
      * @param additionalSettings Will be passed as part of the list creation body
      */
     /*tslint:disable max-line-length */
-    public add(title: string, description = "", template = 100, enableContentTypes = false, additionalSettings: TypedHash<string> = {}): Promise<ListAddResult> {
+    public add(title: string, description = "", template = 100, enableContentTypes = false, additionalSettings: TypedHash<string | number | boolean> = {}): Promise<ListAddResult> {
 
         let postBody = JSON.stringify(Util.extend({
             "__metadata": { "type": "SP.List" },
@@ -188,39 +189,44 @@ export class List extends QueryableSecurable {
     /**
      * Updates this list intance with the supplied properties 
      * 
-     * 
+     * @param properties A plain object hash of the string values to update for the list
+     * @param eTag Value used in the IF-Match header, by default "*"
      */
-    public update(properties: TypedHash<string>): Promise<ListUpdateResult> {
+    /* tslint:disable member-access */
+    public update(properties: TypedHash<string | number | boolean>, eTag = "*"): Promise<ListUpdateResult> {
 
         let postBody = JSON.stringify(Util.extend({
             "__metadata": { "type": "SP.List" },
         }, properties));
 
-        // TODO:: if we update the title, we need to send back a new list based on the new title.
-
         return this.post({
             body: postBody,
             headers: {
-                "IF-Match": "*",
+                "IF-Match": eTag,
                 "X-HTTP-Method": "MERGE",
             },
         }).then((data) => {
+
+            let retList = properties.hasOwnProperty("Title") ? new List(this.parentUrl, `getByTitle('${properties["Title"]}')`) : this;
+
             return {
                 data: data,
-                list: this,
+                list: retList,
             };
         });
     }
+    /* tslint:enable */
 
     /**
      * Delete this list
      * 
+     * @param eTag Value used in the IF-Match header, by default "*"
      */
-    public delete(): Promise<void> {
+    public delete(eTag = "*"): Promise<void> {
 
         return this.post({
             headers: {
-                "IF-Match": "*",
+                "IF-Match": eTag,
                 "X-HTTP-Method": "DELETE",
             },
         });

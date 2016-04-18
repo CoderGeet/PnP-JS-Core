@@ -1,6 +1,7 @@
 "use strict";
 
-import { Queryable, QueryableSecurable } from "./Queryable";
+import { Queryable } from "./Queryable";
+import { QueryableSecurable } from "./QueryableSecurable";
 import { Lists } from "./lists";
 import { RoleAssignments } from "./roleAssignments";
 import { Navigation } from "./navigation";
