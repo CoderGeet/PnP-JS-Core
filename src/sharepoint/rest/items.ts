@@ -4,6 +4,8 @@ import { Queryable, QueryableCollection, QueryableInstance } from "./Queryable";
 import { QueryableSecurable } from "./QueryableSecurable";
 import { Folder } from "./folders";
 import { ContentType } from "./contenttypes";
+import { TypedHash } from "../../collections/collections";
+import * as Util from "../../utils/util";
 
 /**
  * Describes a collection of Item objects
@@ -28,6 +30,30 @@ export class Items extends QueryableCollection {
     public getById(id: number): Item {
         this.concat(`(${id})`);
         return new Item(this);
+    }
+
+    /**
+     * Adds a new item to the collection
+     * 
+     * @param properties The new items's properties
+     */
+    public add(properties: TypedHash<string | number | boolean> = {}): Promise<ItemAddResult> {
+
+        let parentList = new QueryableInstance(this.parentUrl);
+
+        return parentList.select("ListItemEntityTypeFullName").get().then((d) => {
+
+            let postBody = JSON.stringify(Util.extend({
+                "__metadata": { "type": d.ListItemEntityTypeFullName },
+            }, properties));
+
+            return this.post({ body: postBody }).then((data) => {
+                return {
+                    data: data,
+                    item: this.getById(data.Id),
+                };
+            });
+        });
     }
 }
 
@@ -117,4 +143,60 @@ export class Item extends QueryableSecurable {
     public get folder(): Folder {
         return new Folder(this, "Folder");
     }
+
+
+    /**
+     * Updates this list intance with the supplied properties 
+     * 
+     * @param properties A plain object hash of values to update for the list
+     * @param eTag Value used in the IF-Match header, by default "*"
+     */
+    public update(properties: TypedHash<string | number | boolean>, eTag = "*"): Promise<ItemUpdateResult> {
+
+        let parentList = new QueryableInstance(this.parentUrl.substr(0, this.parentUrl.lastIndexOf("/")));
+
+        return parentList.select("ListItemEntityTypeFullName").get().then((d) => {
+
+            let postBody = JSON.stringify(Util.extend({
+                "__metadata": { "type": d.ListItemEntityTypeFullName },
+            }, properties));
+
+            return this.post({
+                body: postBody,
+                headers: {
+                    "IF-Match": eTag,
+                    "X-HTTP-Method": "MERGE",
+                },
+            }).then((data) => {
+                return {
+                    data: data,
+                    item: this,
+                };
+            });
+        });
+    }
+
+    /**
+     * Delete this item
+     * 
+     * @param eTag Value used in the IF-Match header, by default "*"
+     */
+    public delete(eTag = "*"): Promise<void> {
+        return this.post({
+            headers: {
+                "IF-Match": eTag,
+                "X-HTTP-Method": "DELETE",
+            },
+        });
+    }
+}
+
+export interface ItemAddResult {
+    item: Item;
+    data: any;
+}
+
+export interface ItemUpdateResult {
+    item: Item;
+    data: any;
 }

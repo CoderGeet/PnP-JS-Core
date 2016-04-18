@@ -223,7 +223,6 @@ export class List extends QueryableSecurable {
      * @param eTag Value used in the IF-Match header, by default "*"
      */
     public delete(eTag = "*"): Promise<void> {
-
         return this.post({
             headers: {
                 "IF-Match": eTag,
