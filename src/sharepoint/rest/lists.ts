@@ -57,7 +57,7 @@ export class Lists extends QueryableCollection {
 
         let postBody = JSON.stringify(Util.extend({
             "__metadata": { "type": "SP.List" },
-            "AllowContentTypes": true,
+            "AllowContentTypes": enableContentTypes,
             "BaseTemplate": template,
             "ContentTypesEnabled": enableContentTypes,
             "Description": description,
@@ -189,7 +189,7 @@ export class List extends QueryableSecurable {
     /**
      * Updates this list intance with the supplied properties 
      * 
-     * @param properties A plain object hash of the string values to update for the list
+     * @param properties A plain object hash of values to update for the list
      * @param eTag Value used in the IF-Match header, by default "*"
      */
     /* tslint:disable member-access */
