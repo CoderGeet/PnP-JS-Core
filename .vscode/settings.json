@@ -5,6 +5,7 @@
         "**/.DS_Store": true,
         "lib/": true,
         "node_modules/": true,
-        "server-root/require.js": true
+        "server-root/require.js": true,
+        "coverage": true
     }
 }
