@@ -117,7 +117,7 @@ export class Queryable {
      * Executes the currently built request
      * 
      */
-    public get(parser: (r: Response) => Promise<any> = (r) => r.json()): Promise<any> {
+    public get(parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
         let client = new HttpClient();
         return client.get(this.toUrlAndQuery()).then(function (response) {
 
@@ -132,7 +132,7 @@ export class Queryable {
         });
     }
 
-    protected post(postOptions: any = {}, parser: (r: Response) => Promise<any> = (r) => r.json()): Promise<any> {
+    protected post(postOptions: any = {}, parser: (r: Response) => Promise<any> = this.defaultParser): Promise<any> {
 
         let client = new HttpClient();
 
@@ -155,11 +155,25 @@ export class Queryable {
 
             // pipe our parsed content
             return parser(response);
+        });
+    }
 
-        }).then(function (parsed) {
-
-            // try and return the "data" portion of the response
-            return parsed.hasOwnProperty("d") ? parsed.d.hasOwnProperty("results") ? parsed.d.results : parsed.d : parsed;
+    /**
+     * Default parser used to simply the parsing of standard SharePoint results
+     * 
+     * @param r Response object from a successful fetch request
+     */
+    private defaultParser(r: Response): Promise<any> {
+        return r.json().then(function (json) {
+            if (json.hasOwnProperty("d")) {
+                if (json.d.hasOwnProperty("results")) {
+                    return json.d.results;
+                }
+                return json.d;
+            } else if (json.hasOwnProperty("value")) {
+                return json.value;
+            }
+            return json;
         });
     }
 }
