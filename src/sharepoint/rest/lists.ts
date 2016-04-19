@@ -81,7 +81,7 @@ export class Lists extends QueryableCollection {
     public ensureSiteAssetsLibrary(): Promise<List> {
         let q = new Lists(this, "ensuresiteassetslibrary");
         return q.post().then((json) => {
-            return new List(json["odata.id"]);
+            return new List(<string>json["odata.id"]);
         });
     }
     /*tslint:enable */
@@ -93,7 +93,7 @@ export class Lists extends QueryableCollection {
     public ensureSitePagesLibrary(): Promise<List> {
         let q = new Lists(this, "ensuresitepageslibrary");
         return q.post().then((json) => {
-            return new List(json["odata.id"]);
+            return new List(<string>json["odata.id"]);
         });
     }
     /*tslint:enable */

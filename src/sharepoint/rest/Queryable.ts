@@ -22,14 +22,24 @@ export class Queryable {
         this._query = new Dictionary<string>();
 
         if (typeof baseUrl === "string") {
-            this._parentUrl = baseUrl as string;
+            // we need to do some extra parsing to get the parent url correct if we are
+            // being created from just a string.
+            if (baseUrl.lastIndexOf("/") > baseUrl.lastIndexOf("(")) {
+                let index = baseUrl.lastIndexOf("/");
+                this._parentUrl = baseUrl.slice(0, index);
+                path = Util.combinePaths(baseUrl.slice(index + 1), path);
+                this._url = Util.combinePaths(this._parentUrl, path);
+            } else {
+                let index = baseUrl.lastIndexOf("(");
+                this._parentUrl = baseUrl.slice(0, index);
+                this._url = Util.combinePaths(baseUrl, path);
+            }
         } else {
             let q = baseUrl as Queryable;
             this._parentUrl = q._url;
             this._query.merge(q._query);
+            this._url = Util.combinePaths(this._parentUrl, path);
         }
-
-        this._url = Util.combinePaths(this._parentUrl, path);
     }
 
     /**
