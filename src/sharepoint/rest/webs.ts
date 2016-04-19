@@ -9,6 +9,8 @@ import { SiteUsers } from "./siteUsers";
 import { ContentTypes } from "./contentTypes";
 import { Folders, Folder } from "./folders";
 import { File } from "./files";
+import { TypedHash } from "../../collections/collections";
+import * as Util from "../../utils/util";
 
 /**
  * Describes a web
@@ -91,4 +93,45 @@ export class Web extends QueryableSecurable {
     public getFileByServerRelativeUrl(fileRelativeUrl: string): File {
         return new File(this, `getFileByServerRelativeUrl('${fileRelativeUrl}')`);
     }
+
+    /**
+     * Updates this web intance with the supplied properties 
+     * 
+     * @param properties A plain object hash of values to update for the web
+     */
+    public update(properties: TypedHash<string | number | boolean>): Promise<WebUpdateResult> {
+
+        let postBody = JSON.stringify(Util.extend({
+            "__metadata": { "type": "SP.Web" },
+        }, properties));
+
+        return this.post({
+            body: postBody,
+            headers: {
+                "X-HTTP-Method": "MERGE",
+            },
+        }).then((data) => {
+            return {
+                data: data,
+                web: this,
+            };
+        });
+    }
+
+    /**
+     * Delete this web
+     * 
+     */
+    public delete(): Promise<void> {
+        return this.post({
+            headers: {
+                "X-HTTP-Method": "DELETE",
+            },
+        });
+    }
+}
+
+export interface WebUpdateResult {
+    data: any;
+    web: Web;
 }

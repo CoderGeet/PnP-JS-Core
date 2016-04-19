@@ -40,8 +40,7 @@ export class Lists extends QueryableCollection {
      * @param title The Id of the list  
      */
     public getById(id: string): List {
-        this.concat(`(guid'${id}')`);
-        return new List(this);
+        return new List(this.toUrl().concat(`(guid'${id}')`));
     }
 
     /**

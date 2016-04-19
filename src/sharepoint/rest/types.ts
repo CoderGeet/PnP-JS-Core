@@ -275,3 +275,102 @@ export interface ListItemFormUpdateValue {
      */
     HasException?: boolean;
 }
+
+/**
+ * Specifies the type of the field.
+ */
+export enum FieldTypes {
+    Invalid = 0,
+    Integer = 1,
+    Text = 2,
+    Note = 3,
+    DateTime = 4,
+    Counter = 5,
+    Choice = 6,
+    Lookup = 7,
+    Boolean = 8,
+    Number = 9,
+    Currency = 10,
+    URL = 11,
+    Computed = 12,
+    Threading = 13,
+    Guid = 14,
+    MultiChoice = 15,
+    GridChoice = 16,
+    Calculated = 17,
+    File = 18,
+    Attachments = 19,
+    User = 20,
+    Recurrence = 21,
+    CrossProjectLink = 22,
+    ModStat = 23,
+    Error = 24,
+    ContentTypeId = 25,
+    PageSeparator = 26,
+    ThreadIndex = 27,
+    WorkflowStatus = 28,
+    AllDayEvent = 29,
+    WorkflowEventType = 30
+}
+
+export enum DateTimeFieldFormatType {
+    DateOnly = 0,
+    DateTime = 1
+}
+
+/**
+ * Specifies the control settings while adding a field.
+ */
+export enum AddFieldOptions {
+    /**
+     *  Specify that a new field added to the list must also be added to the default content type in the site collection
+     */
+    DefaultValue = 0,
+    /**
+     * Specify that a new field added to the list must also be added to the default content type in the site collection.
+     */
+    AddToDefaultContentType = 1,
+    /**
+     * Specify that a new field must not be added to any other content type
+     */
+    AddToNoContentType = 2,
+    /**
+     *  Specify that a new field that is added to the specified list must also be added to all content types in the site collection
+     */
+    AddToAllContentTypes = 4,
+    /**
+     * Specify adding an internal field name hint for the purpose of avoiding possible database locking or field renaming operations
+     */
+    AddFieldInternalNameHint = 8,
+    /**
+     * Specify that a new field that is added to the specified list must also be added to the default list view
+     */
+    AddFieldToDefaultView = 16,
+    /**
+     * Specify to confirm that no other field has the same display name
+     */
+    AddFieldCheckDisplayName = 32
+}
+
+export interface XmlSchemaFieldCreationInformation {
+    Options?: AddFieldOptions;
+    SchemaXml: string;
+}
+
+export enum CalendarType {
+    Gregorian = 1,
+    Japan = 3,
+    Taiwan = 4,
+    Korea = 5,
+    Hijri = 6,
+    Thai = 7,
+    Hebrew = 8,
+    GregorianMEFrench = 9,
+    GregorianArabic = 10,
+    GregorianXLITEnglish = 11,
+    GregorianXLITFrench = 12,
+    KoreaJapanLunar = 14,
+    ChineseLunar = 15,
+    SakaEra = 16,
+    UmAlQura = 23
+}

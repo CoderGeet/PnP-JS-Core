@@ -29,8 +29,7 @@ export class Items extends QueryableCollection {
      * @param id The integer id of the item to retrieve
      */
     public getById(id: number): Item {
-        this.concat(`guid(${id})`);
-        return new Item(this);
+        return new Item(this.toUrl().concat(`(${id})`));
     }
 
     /**
