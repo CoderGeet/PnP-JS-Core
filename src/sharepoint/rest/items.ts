@@ -6,6 +6,7 @@ import { Folder } from "./folders";
 import { ContentType } from "./contenttypes";
 import { TypedHash } from "../../collections/collections";
 import * as Util from "../../utils/util";
+import * as Types from "./types";
 
 /**
  * Describes a collection of Item objects
@@ -28,7 +29,7 @@ export class Items extends QueryableCollection {
      * @param id The integer id of the item to retrieve
      */
     public getById(id: number): Item {
-        this.concat(`(${id})`);
+        this.concat(`guid(${id})`);
         return new Item(this);
     }
 
@@ -69,8 +70,8 @@ export class Item extends QueryableSecurable {
      * 
      * @param baseUrl The url or Queryable which forms the parent of this fields collection
      */
-    constructor(baseUrl: string | Queryable) {
-        super(baseUrl);
+    constructor(baseUrl: string | Queryable, path?: string) {
+        super(baseUrl, path);
     }
 
     /**
@@ -189,6 +190,28 @@ export class Item extends QueryableSecurable {
             },
         });
     }
+
+    /**
+     * Moves the list item to the Recycle Bin and returns the identifier of the new Recycle Bin item.
+     */
+    public recycle(): Promise<string> {
+        this.append("recycle");
+        return this.post();
+    }
+
+    /**
+     * Validates and sets the values of the specified collection of fields for the list item.
+     * 
+     * @param formValues The fields to change and their new values.
+     * @param newDocumentUpdate true if the list item is a document being updated after upload; otherwise false.
+     */
+    /* tslint:disable max-line-length */
+    public validateUpdateListItem(formValues: Types.ListItemFormUpdateValue[], newDocumentUpdate = false): Promise<Types.ListItemFormUpdateValue[]> {
+        let postBody = JSON.stringify({ "formValues": formValues, bNewDocumentUpdate: newDocumentUpdate });
+        let item = new Item(this, "validateupdatelistitem");
+        return item.post({ body: postBody });
+    }
+    /* tslint:enable */
 }
 
 export interface ItemAddResult {

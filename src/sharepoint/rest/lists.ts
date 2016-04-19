@@ -295,7 +295,7 @@ export class List extends QueryableSecurable {
     /**
      * Moves the list to the Recycle Bin and returns the identifier of the new Recycle Bin item.
      */
-    public recycle(): Promise<any> {
+    public recycle(): Promise<string> {
         this.append("recycle");
         return this.post();
     }
