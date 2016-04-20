@@ -144,7 +144,6 @@ export class Item extends QueryableSecurable {
         return new Folder(this, "Folder");
     }
 
-
     /**
      * Updates this list intance with the supplied properties 
      * 

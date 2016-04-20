@@ -194,16 +194,6 @@ export class Queryable {
  */
 export class QueryableCollection extends Queryable {
 
-    public top(pageSize: number): any {
-        this._query.add("$top", pageSize.toString());
-        return this;
-    }
-
-    public skip(pageStart: number): any {
-        this._query.add("$skip", pageStart.toString());
-        return this;
-    }
-
     public filter(filter: string): any {
         this._query.add("$filter", filter);
         return this;

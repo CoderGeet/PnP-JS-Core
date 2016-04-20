@@ -374,3 +374,8 @@ export enum CalendarType {
     SakaEra = 16,
     UmAlQura = 23
 }
+
+export enum UrlFieldFormatType {
+    Hyperlink = 0,
+    Image = 1
+}
