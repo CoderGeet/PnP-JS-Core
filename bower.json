@@ -1,13 +1,12 @@
 {
-    "name": "ms-o365devpnp",
+    "name": "sp-pnp-js",
     "description": "A reusable JavaScript library targeting SharePoint client-side development.",
     "main": "dist/pnp.js",
     "authors": [
         "Microsoft and other contributors"
     ],
     "dependencies": {
-        "es6-promise": "~3.1.2",
-        "jquery": "*",
+
         "whatwg-fetch": "^0.11.0"
     },
     "keywords": [
@@ -16,27 +15,31 @@
         "tools"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/OfficeDev/PnP/",
+    "homepage": "https://github.com/OfficeDev/PnP-JS-Core",
     "moduleType": [
         "amd",
         "globals",
-        "node",
-        "yui"
+        "node"
     ],
     "ignore": [
         "**/.*",
-        "node_modules",
-        "typings/",
-        "output/",
+        "gulpfile.js",
+        "jsconfig.json",
+        "settings.js",
+        "settings.example.js",
         "package.json",
+        "tsconfig.json",
+        "tslint.json",
         "server-root/",
-        ".vscode/",
-        "coverage/",
-        ".git/"
+        "src/",
+        "tests/",
+        "typings.json",
+        "gulptasks/",
+        "typings.json",
+        "debug/"
     ],
     "repository": {
         "type": "git",
-        "url": "git://github.com/OfficeDev/PnP-JS-Core"
-    },
-    "private": true
+        "url": "git://github.com/OfficeDev/PnP-JS-Core/"
+    }
 }

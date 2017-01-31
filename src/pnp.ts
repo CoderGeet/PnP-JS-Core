@@ -1,39 +1,78 @@
-"use strict";
-
-import * as Util from "./utils/Util";
-import { SharePoint } from "./SharePoint/SharePoint";
-import { PnPClientStorage } from "./utils/Storage";
-import * as Configuration from "./configuration/configuration";
+import { Util } from "./utils/util";
+import { PnPClientStorage } from "./utils/storage";
+import { Settings } from "./configuration/configuration";
 import { Logger } from "./utils/logging";
+import { Rest } from "./sharepoint/rest";
+import { setRuntimeConfig, LibraryConfiguration } from "./configuration/pnplibconfig";
 
 /**
  * Root class of the Patterns and Practices namespace, provides an entry point to the library
  */
-class PnP {
-    /**
-     * Utility methods
-     */
-    public static util = Util;
 
-    /**
-     * SharePoint
-     */
-    public static sharepoint = new SharePoint();
+/**
+ * Utility methods
+ */
+export const util = Util;
 
-    /**
-     * Provides access to local and session storage through
-     */
-    public static storage: PnPClientStorage = new PnPClientStorage();
+/**
+ * Provides access to the REST interface
+ */
+export const sp = new Rest();
 
-    /**
-     * Configuration 
-     */
-    public static configuration = Configuration;
+/**
+ * Provides access to local and session storage
+ */
+export const storage: PnPClientStorage = new PnPClientStorage();
 
+/**
+ * Global configuration instance to which providers can be added
+ */
+export const config = new Settings();
+
+/**
+ * Global logging instance to which subscribers can be registered and messages written
+ */
+export const log = Logger;
+
+/**
+ * Allows for the configuration of the library
+ */
+export const setup: (config: LibraryConfiguration) => void = setRuntimeConfig;
+
+/**
+ * Expose a subset of classes from the library for public consumption
+ */
+export * from "./types/index";
+
+// creating this class instead of directly assigning to default fixes issue #116
+let Def = {
+    /**
+     * Global configuration instance to which providers can be added
+     */
+    config: config,
     /**
      * Global logging instance to which subscribers can be registered and messages written
      */
-    public static logging = new Logger();
-}
+    log: log,
+    /**
+     * Provides access to local and session storage
+     */
+    setup: setup,
+    /**
+     * Provides access to the REST interface
+     */
+    sp: sp,
+    /**
+     * Provides access to local and session storage
+     */
+    storage: storage,
+    /**
+     * Utility methods
+     */
+    util: util,
+};
 
-export = PnP;
+/**
+ * Enables use of the import pnp from syntax
+ */
+export default Def;

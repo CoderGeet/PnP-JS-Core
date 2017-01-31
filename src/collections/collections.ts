@@ -1,7 +1,3 @@
-"use strict";
-
-import * as Util from "../utils/util";
-
 /**
  * Interface defining an object with a known property type
  */
@@ -16,27 +12,15 @@ export class Dictionary<T> {
 
     /**
      * Creates a new instance of the Dictionary<T> class
-     * 
+     *
      * @constructor
      */
-    constructor() {
-        this.keys = [];
-        this.values = [];
+    constructor(private keys: string[] = [], private values: T[] = []) {
     }
 
     /**
-     * The array used to store all the keys
-     */
-    private keys: string[];
-
-    /**
-     * The array used to store all the values
-     */
-    private values: T[];
-
-    /**
      * Gets a value from the collection using the specified key
-     * 
+     *
      * @param key The key whose value we want to return, returns null if the key does not exist
      */
     public get(key: string): T {
@@ -49,7 +33,7 @@ export class Dictionary<T> {
 
     /**
      * Adds the supplied key and value to the dictionary
-     * 
+     *
      * @param key The key to add
      * @param o The value to add
      */
@@ -66,35 +50,30 @@ export class Dictionary<T> {
     /**
      * Merges the supplied typed hash into this dictionary instance. Existing values are updated and new ones are created as appropriate.
      */
-    /* tslint:disable member-access */
     public merge(source: TypedHash<T> | Dictionary<T>): void {
-        if (Util.isFunction(source["getKeys"])) {
+        if ("getKeys" in source) {
             let sourceAsDictionary = source as Dictionary<T>;
-            let keys = sourceAsDictionary.getKeys();
-            let l = keys.length;
-            for (let i = 0; i < l; i++) {
-                this.add(keys[i], sourceAsDictionary.get(keys[i]));
-            }
+            sourceAsDictionary.getKeys().map(key => {
+                this.add(key, sourceAsDictionary.get(key));
+            });
         } else {
             let sourceAsHash = source as TypedHash<T>;
             for (let key in sourceAsHash) {
                 if (sourceAsHash.hasOwnProperty(key)) {
-                    this.add(key, source[key]);
+                    this.add(key, sourceAsHash[key]);
                 }
             }
         }
     }
-    /* tslint:enable */
 
     /**
      * Removes a value from the dictionary
-     * 
+     *
      * @param key The key of the key/value pair to remove. Returns null if the key was not found.
      */
     public remove(key: string): T {
         let index = this.keys.indexOf(key);
         if (index < 0) {
-            // could throw an exception here
             return null;
         }
         let val = this.values[index];

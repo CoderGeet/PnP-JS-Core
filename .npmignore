@@ -1,4 +1,6 @@
 .npmignore
+.github
+.bithoundrc
 bower.json
 gulpfile.js
 jsconfig.json
@@ -6,9 +8,16 @@ settings.js
 settings.example.js
 tsconfig.json
 tslint.json
+typings.json
+webpack.config.js
+webpack-serve.config.js
 .vscode/
 coverage/
-server-root/
 src/
-typings/
-lib/**/*.test.js
+tests/
+gulptasks/
+docs/
+typedoctheme/
+debug/
+debugging/
+testing/

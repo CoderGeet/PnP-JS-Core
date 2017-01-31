@@ -1,10 +1,25 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "umd",
+        "target": "es2015",
+        "module": "commonjs",
         "jsx": "react",
         "declaration": false,
         "sourceMap": true,
-        "removeComments": true
-    }
+        "removeComments": false,
+        "types": [
+            "sharepoint",
+            "whatwg-fetch"
+        ],
+        "noImplicitAny": true,
+        "allowUnreachableCode": false,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "pretty": true
+    },
+    "include": [
+        "src/**/*"
+    ]
 }

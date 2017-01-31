@@ -1,12 +1,4 @@
-"use strict";
-
-import * as Collections from "../collections/collections";
-import * as providers from "./providers/providers";
-
-/**
- * Set of pre-defined providers which are available from this library
- */
-export let Providers = providers;
+import { TypedHash, Dictionary } from "../collections/collections";
 
 /**
  * Interface for configuration providers
@@ -17,7 +9,7 @@ export interface IConfigurationProvider {
     /**
      * Gets the configuration from the provider
      */
-    getConfiguration(): Promise<Collections.TypedHash<string>>;
+    getConfiguration(): Promise<TypedHash<string>>;
 }
 
 /** 
@@ -26,19 +18,19 @@ export interface IConfigurationProvider {
  */
 export class Settings {
 
+    /** 
+     * The settings currently stored in this instance
+     */
+    private _settings: Dictionary<string>;
+
     /**
      * Creates a new instance of the settings class
      * 
      * @constructor
      */
     constructor() {
-        this._settings = new Collections.Dictionary<string>();
+        this._settings = new Dictionary<string>();
     }
-
-    /** 
-     * The settings currently stored in this instance
-     */
-    private _settings: Collections.Dictionary<string>;
 
     /**
      * Adds a new single setting, or overwrites a previous setting with the same key
@@ -63,10 +55,17 @@ export class Settings {
     /**
      * Applies the supplied hash to the setting collection overwriting any existing value, or created new values
      * 
-     * @param {Collections.TypedHash<any>} hash The set of values to add
+     * @param {TypedHash<any>} hash The set of values to add
      */
-    public apply(hash: Collections.TypedHash<any>): void {
-        this._settings.merge(hash);
+    public apply(hash: TypedHash<any>): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            try {
+                this._settings.merge(hash);
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     /**

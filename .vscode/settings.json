@@ -5,7 +5,15 @@
         "**/.DS_Store": true,
         "lib/": true,
         "node_modules/": true,
+<<<<<<< HEAD
         "server-root/require.js": true,
         "coverage": true
     }
+=======
+        "coverage": true,
+        "testing": true,
+        "debugging": true
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+>>>>>>> 159efbbcd163ad9395711d664f9e2121adf27b86
 }

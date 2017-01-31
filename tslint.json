@@ -8,7 +8,7 @@
     "indent": [true, "spaces"],
     "label-position": true,
     "label-undefined": true,
-    "max-line-length": [true, 140],
+    "max-line-length": [true, 180],
     "member-access": true,
     "member-ordering": [true,
       "public-before-private",
@@ -25,7 +25,7 @@
       "trace"
     ],
     "no-construct": true,
-    "no-debugger": true,
+    "no-debugger": false,
     "no-duplicate-key": true,
     "no-duplicate-variable": true,
     "no-empty": true,
